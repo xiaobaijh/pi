@@ -331,6 +331,42 @@ Some Anthropic models require adaptive thinking (`thinking.type: "adaptive"` plu
 
 Some Anthropic-compatible providers emit thinking blocks with empty signatures and still expect them on replay. Set `allowEmptySignature` to `true` only for those providers; real Anthropic rejects empty thinking signatures.
 
+Anthropic Messages auth is auto-detected by default: tokens containing Anthropic's OAuth marker (`sk-ant-oat`) are sent as `Authorization: Bearer`; other credentials are sent as `X-Api-Key`. For Anthropic-compatible proxies that require bearer auth but issue opaque tokens without that marker, store the credential in `auth.json` as a provider-scoped `ANTHROPIC_AUTH_TOKEN`. Pi sends that scoped value as `Authorization: Bearer` for `anthropic-messages` requests.
+
+`~/.pi/agent/auth.json`:
+
+```json
+{
+  "anthropic-proxy": {
+    "type": "api_key",
+    "key": "$ANTHROPIC_AUTH_TOKEN",
+    "env": {
+      "ANTHROPIC_AUTH_TOKEN": "proxy-bearer-token"
+    }
+  }
+}
+```
+
+Then define the provider and models normally:
+
+```json
+{
+  "providers": {
+    "anthropic-proxy": {
+      "baseUrl": "https://proxy.example.com",
+      "api": "anthropic-messages",
+      "models": [
+        {
+          "id": "claude-sonnet-4-6",
+          "reasoning": true,
+          "input": ["text", "image"]
+        }
+      ]
+    }
+  }
+}
+```
+
 ```json
 {
   "providers": {

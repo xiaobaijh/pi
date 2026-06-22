@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed Anthropic-compatible provider bearer auth to honor provider-scoped `ANTHROPIC_AUTH_TOKEN` environment overrides ([#5871](https://github.com/earendil-works/pi/issues/5871)).
+
 ## [0.79.9] - 2026-06-20
 
 ### Added

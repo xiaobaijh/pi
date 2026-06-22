@@ -864,11 +864,14 @@ function createClient(
 		return { client, isOAuthToken: false };
 	}
 
-	// OAuth: Bearer auth, Claude Code identity headers
-	if (isOAuthToken(apiKey)) {
+	// OAuth: Bearer auth, Claude Code identity headers.
+	// Provider-scoped auth.json env can set ANTHROPIC_AUTH_TOKEN to force Bearer
+	// auth for opaque Anthropic-compatible OAuth/proxy tokens.
+	const oauthToken = env?.ANTHROPIC_AUTH_TOKEN || (isOAuthToken(apiKey) ? apiKey : undefined);
+	if (oauthToken) {
 		const client = new Anthropic({
 			apiKey: null,
-			authToken: apiKey,
+			authToken: oauthToken,
 			baseURL: model.baseUrl,
 			dangerouslyAllowBrowser: true,
 			defaultHeaders: mergeHeaders(

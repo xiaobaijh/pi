@@ -106,6 +106,8 @@ The file is created with `0600` permissions (user read/write only). Auth file cr
 
 API key credentials can also include provider-scoped environment values. These values are used before process environment variables when resolving the credential key, provider/model headers, and provider configuration such as Cloudflare account IDs, Azure OpenAI settings, Vertex project/location, Bedrock settings, `PI_CACHE_RETENTION`, and `HTTP_PROXY`/`HTTPS_PROXY`.
 
+Anthropic Messages auto-detects Anthropic OAuth tokens by the `sk-ant-oat` marker and sends those as bearer credentials. For Anthropic-compatible proxies that require bearer auth but issue opaque tokens without that marker, store the token as provider-scoped `ANTHROPIC_AUTH_TOKEN`; the Anthropic Messages provider sends that value as `Authorization: Bearer`.
+
 ```json
 {
   "cloudflare-ai-gateway": {
